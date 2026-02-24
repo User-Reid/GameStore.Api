@@ -1,1 +1,15 @@
-GET http://localhost:5023
+GET http://localhost:5023/games
+
+###
+GET http://localhost:5023/games/1
+
+###
+POST http://localhost:5023/games
+Content-Type: application/json
+
+{
+  "name": "Escape from Tarkov",
+  "genre": "Loot and Shoot",
+  "price": 119.99,
+  "releaseDate": "2020-10-20"
+}

@@ -1,5 +1,7 @@
 using GameStore.Api.DTOs;
 
+const string GetGameEndpointName = "GetGame";
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors();
@@ -18,6 +20,28 @@ app.UseCors(x => x.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod());
 
 
 //GET Game /games
-app.MapGet("/games", () => gamesList);
+app.MapGet("games", () => gamesList);
+
+
+//GET Game/games/1
+app.MapGet("games/{id}", (int id) =>
+gamesList.Find((game) => game.Id == id)
+).WithName(GetGameEndpointName);
+
+//POST /games
+app.MapPost("games", (CreateGameDto newGame) =>
+{
+  GameDto game = new GameDto(
+    gamesList.Count + 1,
+    newGame.Name,
+    newGame.Genre,
+    newGame.Price,
+    newGame.ReleaseDate
+  );
+
+  gamesList.Add(game);
+
+  return Results.CreatedAtRoute(GetGameEndpointName, new { id = game.Id}, game);
+});
 
 app.Run();
