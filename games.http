@@ -8,8 +8,8 @@ POST http://localhost:5023/games
 Content-Type: application/json
 
 {
-  "name": "Escape from Tarkov",
-  "genre": "Loot and Shoot",
+  "title": "Escape from Tarkov",
+  "genre": "Looter/Shooter",
   "price": 119.99,
-  "releaseDate": "2020-10-20"
+  "releaseDate": "2020-07-23"
 }

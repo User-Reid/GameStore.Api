@@ -1,4 +1,4 @@
-using GameStore.Api.DTOs;
+using Gamestore.Api.DTOs;
 
 const string GetGameEndpointName = "GetGame";
 
@@ -33,7 +33,7 @@ app.MapPost("games", (CreateGameDto newGame) =>
 {
   GameDto game = new GameDto(
     gamesList.Count + 1,
-    newGame.Name,
+    newGame.Title,
     newGame.Genre,
     newGame.Price,
     newGame.ReleaseDate
