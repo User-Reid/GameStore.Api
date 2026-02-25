@@ -44,4 +44,28 @@ app.MapPost("games", (CreateGameDto newGame) =>
   return Results.CreatedAtRoute(GetGameEndpointName, new { id = game.Id}, game);
 });
 
+//PUT /games/{id}
+app.MapPut("games/{id}", (int id, UpdateGameDto updatedGame) =>
+{
+  var index = gamesList.FindIndex((game) => game.Id == id);
+
+  gamesList[index] = new GameDto(
+    id,
+    updatedGame.Title,
+    updatedGame.Genre,
+    updatedGame.Price,
+    updatedGame.ReleaseDate
+  );
+
+  return Results.NoContent();
+});
+
+//DELETE /games{id}
+app.MapDelete("games/{id}", (int id) =>
+{
+  gamesList.RemoveAll((game) => game.Id == id);
+
+  return Results.NoContent();
+});
+
 app.Run();
