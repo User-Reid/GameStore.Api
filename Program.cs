@@ -1,12 +1,17 @@
 using Gamestore.Api.DTOs;
+{
+  
+}
 
-const string GetGameEndpointName = "GetGame";
+const string GetGameEndpoint = "GetGame";
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors();
 
 var app = builder.Build();
+
+app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 
 var gamesList = new List<GameDto>
 {
@@ -16,32 +21,33 @@ var gamesList = new List<GameDto>
   new GameDto(4, "Marvel Rivals", "Hero-Shooter", 19.99, new DateOnly(1995, 7, 5)),
 };
 
-app.UseCors(x => x.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod());
 
-
-//GET Game /games
+//GET /games
 app.MapGet("games", () => gamesList);
 
-
-//GET Game/games/1
+//GET /games/{id}
 app.MapGet("games/{id}", (int id) =>
-gamesList.Find((game) => game.Id == id)
-).WithName(GetGameEndpointName);
+{
+  var game = gamesList.Find((game) => game.Id == id);
+
+  return game is null ? Results.NotFound() : Results.Ok(game);
+}).WithName(GetGameEndpoint);
+
 
 //POST /games
-app.MapPost("games", (CreateGameDto newGame) =>
+app.MapPost("games", (CreateGameDto gameUpdate) =>
 {
-  GameDto game = new GameDto(
+  var game = new GameDto(
     gamesList.Count + 1,
-    newGame.Title,
-    newGame.Genre,
-    newGame.Price,
-    newGame.ReleaseDate
+    gameUpdate.Title,
+    gameUpdate.Genre,
+    gameUpdate.Price,
+    gameUpdate.ReleaseDate
   );
 
   gamesList.Add(game);
 
-  return Results.CreatedAtRoute(GetGameEndpointName, new { id = game.Id}, game);
+  return Results.AcceptedAtRoute(GetGameEndpoint, new {Id = game.Id}, game);
 });
 
 //PUT /games/{id}
@@ -49,7 +55,12 @@ app.MapPut("games/{id}", (int id, UpdateGameDto updatedGame) =>
 {
   var index = gamesList.FindIndex((game) => game.Id == id);
 
-  gamesList[index] = new GameDto(
+  if(index < 0)
+  {
+    return Results.NotFound();
+  }
+
+  gamesList[index] = new GameDto (
     id,
     updatedGame.Title,
     updatedGame.Genre,
@@ -57,15 +68,15 @@ app.MapPut("games/{id}", (int id, UpdateGameDto updatedGame) =>
     updatedGame.ReleaseDate
   );
 
-  return Results.NoContent();
+  return gamesList[index] is null ? Results.NotFound() : Results.Ok();
 });
 
-//DELETE /games{id}
+//DELETE /games
 app.MapDelete("games/{id}", (int id) =>
 {
   gamesList.RemoveAll((game) => game.Id == id);
 
-  return Results.NoContent();
+  return Results.Ok();
 });
 
 app.Run();
