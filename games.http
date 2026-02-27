@@ -9,7 +9,7 @@ Content-Type: application/json
 
 {
   
-  "title": "",
+  "title": "Escape From Tarkov",
   "genre": "Looter/Shooter",
   "price": 119.99,
   "releaseDate": "2020-07-23"
@@ -21,7 +21,7 @@ PUT http://localhost:5023/games/1
 Content-Type: application/json
 
 {
-  "title": "Super Smash Bros.",
+  "title": "Super Smash Bros. Ultimate",
   "genre": "Party Brawl",
   "price": 59.99,
   "releaseDate": "2018-07-05"
