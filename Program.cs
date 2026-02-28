@@ -1,5 +1,6 @@
 using Gamestore.Api.Data;
 using Gamestore.Api.Endpoints;
+using GameStore.Api.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,5 +16,7 @@ var app = builder.Build();
 app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 
 app.MapGamesEndpoints();
+
+app.MigrateDb();
 
 app.Run();
