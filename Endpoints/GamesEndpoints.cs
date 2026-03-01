@@ -8,13 +8,6 @@ using Microsoft.EntityFrameworkCore;
 
 public static class GamesEndpoints {
   private const string GetGameEndpoint = "GetGame";
-  private readonly static List<GameSummaryDto> gamesList = 
-[
-  new GameSummaryDto(1, "Pokemon", "Adventure", 29.99, new DateOnly(1995, 7, 5)),
-  new GameSummaryDto(2, "Final Fantasy XIV", "Adventure", 29.99, new DateOnly(2014, 7, 5)),
-  new GameSummaryDto(3, "Magic The Gathering", "Adventure", 59.99, new DateOnly(1990, 7, 5)),
-  new GameSummaryDto(4, "Marvel Rivals", "Hero-Shooter", 19.99, new DateOnly(1995, 7, 5)),
-];
 
   public static void MapGamesEndpoints(this WebApplication app)
   {
