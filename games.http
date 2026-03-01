@@ -10,7 +10,7 @@ Content-Type: application/json
 {
   
   "title": "Escape From Tarkov",
-  "genre": "Looter/Shooter",
+  "genreId": 2,
   "price": 119.99,
   "releaseDate": "2020-07-23"
  

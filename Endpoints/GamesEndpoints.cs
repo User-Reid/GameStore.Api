@@ -1,5 +1,9 @@
 namespace Gamestore.Api.Endpoints;
+
+using Gamestore.Api.Data;
 using Gamestore.Api.DTOs;
+using Gamestore.Api.Models;
+using GameStore.Api.Dtos;
 
 public static class GamesEndpoints {
   private const string GetGameEndpoint = "GetGame";
@@ -28,19 +32,28 @@ group.MapGet("/{id}", (int id) =>
 
 
 //POST /games
-group.MapPost("/", (CreateGameDto gameUpdate) =>
+group.MapPost("/", (CreateGameDto createdGame, GameStoreContext dbContext) =>
 {
-  var game = new GameDto(
-    gamesList.Count + 1,
-    gameUpdate.Title,
-    gameUpdate.Genre,
-    gameUpdate.Price,
-    gameUpdate.ReleaseDate
+  Game game = new()
+  {
+    Title = createdGame.Title,
+    GenreId = createdGame.GenreId,
+    Price = createdGame.Price,
+    ReleaseDate = createdGame.ReleaseDate
+  };
+
+  dbContext.Games.Add(game);
+  dbContext.SaveChanges();
+
+  GameDetailsDto gameDto = new(
+    game.Id,
+    game.Title,
+    game.GenreId,
+    game.Price,
+    game.ReleaseDate
   );
 
-  gamesList.Add(game);
-
-  return Results.AcceptedAtRoute(GetGameEndpoint, new {id = game.Id}, game);
+  return Results.AcceptedAtRoute(GetGameEndpoint, new {id = gameDto.Id}, gameDto);
 });
 
 //PUT /games/{id}
