@@ -73,30 +73,29 @@ group.MapPost("/", async (CreateGameDto createdGame, GameStoreContext dbContext)
 });
 
 //PUT /games/{id}
-group.MapPut("/{id}", (int id, UpdateGameDto updatedGame) =>
+group.MapPut("/{id}", async (int id, UpdateGameDto updatedGame, GameStoreContext dbContext) =>
 {
-  var index = gamesList.FindIndex((game) => game.Id == id);
+  var existingGame = await dbContext.Games.FindAsync(id);
 
-  if(index < 0)
+  if(existingGame is null)
   {
     return Results.NotFound();
   }
 
-  gamesList[index] = new GameSummaryDto (
-    id,
-    updatedGame.Title,
-    updatedGame.Genre,
-    updatedGame.Price,
-    updatedGame.ReleaseDate
-  );
+  existingGame.Title = updatedGame.Title;
+  existingGame.GenreId = updatedGame.GenreId;
+  existingGame.Price = updatedGame.Price;
+  existingGame.ReleaseDate = updatedGame.ReleaseDate;
 
-  return gamesList[index] is null ? Results.NotFound() : Results.Ok();
+  await dbContext.SaveChangesAsync();
+
+  return Results.NoContent();
 });
 
 //DELETE /games
-group.MapDelete("/{id}", (int id) =>
+group.MapDelete("/{id}", async (int id, GameStoreContext dbContext) =>
 {
-  gamesList.RemoveAll((game) => game.Id == id);
+  await dbContext.Games.Where(game => game.Id == id).ExecuteDeleteAsync();
 
   return Results.Ok();
 });
