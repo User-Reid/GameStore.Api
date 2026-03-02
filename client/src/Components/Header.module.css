@@ -1,0 +1,14 @@
+header {
+  display: flex;
+  justify-content: flex-start;
+  align-items: end;
+  font-size: xx-large;
+  background-color: green;
+  height: 150px;
+  border-bottom: 5px solid black;
+}
+
+header h2 {
+  margin: 10px;
+  height: fit-content;
+}
