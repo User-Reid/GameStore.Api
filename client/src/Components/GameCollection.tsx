@@ -17,6 +17,12 @@ function GameCollection() {
     );
   }, []);
 
+  async function handleDelete(id: number) {
+    await fetch(`http://localhost:5023/games/${id}`, {
+      method: "DELETE",
+    });
+  }
+
   return (
     <ul>
       {games.map((game) => (
@@ -26,6 +32,8 @@ function GameCollection() {
             A {game.genre} style game, costing {game.price}. Released{" "}
             {game.releaseDate}
           </p>
+          {/* <button onClick={handleEdit}>Edit</button> */}
+          <button onClick={() => handleDelete(game.id)}>Delete</button>
         </li>
       ))}
     </ul>
